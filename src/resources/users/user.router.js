@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const User = require('./user.model');
 const usersService = require('./user.service');
 
@@ -23,6 +24,7 @@ router.route('/').post(async (req, res) => {
 
 router.route('/:id').delete(async (req, res) => {
   const { id } = req.params;
+
   await usersService.deleteById(id);
 
   res.json(`user is deleted with id = ${id}`);

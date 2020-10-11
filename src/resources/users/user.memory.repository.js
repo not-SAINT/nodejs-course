@@ -1,12 +1,19 @@
 const DB = require('../../common/localDB');
 const User = require('./user.model');
+const tasksRepo = require('../tasks/task.memory.repository');
 
 const getAll = async () => {
   return DB.users;
 };
 
 const getById = async userId => {
-  return DB.users.filter(({ id }) => id === userId)[0];
+  const user = DB.users.filter(({ id }) => id === userId)[0];
+
+  if (!user) {
+    throw new Error(`The user with id = ${userId} wasn't found.`);
+  }
+
+  return user;
 };
 
 const create = async userData => {
@@ -18,7 +25,9 @@ const create = async userData => {
 };
 
 const deleteById = async userId => {
-  DB.users.filter(({ id }) => id !== userId);
+  await tasksRepo.unassignUserById(userId);
+
+  DB.users = DB.users.filter(({ id }) => id !== userId);
 };
 
 const updateById = async (userId, userData) => {
