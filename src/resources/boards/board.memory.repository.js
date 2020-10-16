@@ -8,7 +8,7 @@ const getAll = async () => {
 };
 
 const getById = async boardId => {
-  const board = DB.boards.filter(({ id }) => id === boardId)[0];
+  const board = DB.boards.find(({ id }) => id === boardId);
 
   if (!board) {
     throw new Error(`The board with id = ${boardId} wasn't found.`);

@@ -7,7 +7,7 @@ const getAll = async id => {
 
 const getById = async (taskId, boardId) => {
   const tasks = await getAll(boardId);
-  const task = tasks.filter(({ id }) => id === taskId)[0];
+  const task = tasks.find(({ id }) => id === taskId);
 
   if (!task) {
     throw new Error(`The task with id = ${taskId} wasn't found.`);

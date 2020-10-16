@@ -29,14 +29,14 @@ const caesarCipher = (src, shift, action) => {
       const charCode = char.charCodeAt();
       if (
         charCode >= UPPERCASE_START &&
-        charCode <= UPPERCASE_START + ALPHABET_SIZE
+        charCode < UPPERCASE_START + ALPHABET_SIZE
       ) {
         return toChar(absoluteShift(charCode, shift, action, UPPERCASE_START));
       }
 
       if (
         charCode >= LOWERCASE_START &&
-        charCode <= LOWERCASE_START + ALPHABET_SIZE
+        charCode < LOWERCASE_START + ALPHABET_SIZE
       ) {
         return toChar(absoluteShift(charCode, shift, action, LOWERCASE_START));
       }

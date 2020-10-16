@@ -7,7 +7,7 @@ const getAll = async () => {
 };
 
 const getById = async userId => {
-  const user = DB.users.filter(({ id }) => id === userId)[0];
+  const user = DB.users.find(({ id }) => id === userId);
 
   if (!user) {
     throw new Error(`The user with id = ${userId} wasn't found.`);
