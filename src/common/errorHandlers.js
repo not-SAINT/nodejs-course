@@ -19,7 +19,7 @@ const asyncErrorHandler = callback => async (req, res, next) => {
   }
 };
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   const { message } = err;
 
   logger.error(message);
@@ -31,6 +31,7 @@ const errorHandler = (err, req, res) => {
   }
 
   res.status(INTERNAL_SERVER_ERROR).send(getStatusText(INTERNAL_SERVER_ERROR));
+  next();
 };
 
 module.exports = {

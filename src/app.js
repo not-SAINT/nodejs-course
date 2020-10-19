@@ -2,7 +2,9 @@ const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
+const { BAD_REQUEST } = require('http-status-codes');
 
+const CustomError = require('./common/errors');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const { middlewareLogger } = require('./common/logger');
@@ -26,9 +28,12 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
-
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
+
+app.all('*', () => {
+  throw new CustomError(BAD_REQUEST);
+});
 
 app.use(errorHandler);
 
