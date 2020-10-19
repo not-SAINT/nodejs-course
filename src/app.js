@@ -5,12 +5,18 @@ const YAML = require('yamljs');
 
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
+const { middlewareLogger } = require('./common/logger');
+const {
+  uncaughtExceptionHandler,
+  unhandledRejectionHandler,
+  errorHandler
+} = require('./common/errorHandlers');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
-
+app.use(middlewareLogger);
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/', (req, res, next) => {
@@ -23,5 +29,15 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
+
+app.use(errorHandler);
+
+process.on('uncaughtException', uncaughtExceptionHandler);
+process.on('unhandledRejection', unhandledRejectionHandler);
+
+// for cross-check
+// throw Error('Oops!');
+// eslint-disable-next-line no-unreachable
+// Promise.reject(Error('Oops!'));
 
 module.exports = app;

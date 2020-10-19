@@ -1,4 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
+
+const { asyncErrorHandler } = require('../../common/errorHandlers');
 const User = require('./task.model');
 const tasksService = require('./task.service');
 
@@ -9,16 +11,14 @@ router.route('/').get(async (req, res) => {
   res.json(tasks.map(User.toResponse));
 });
 
-router.route('/:id').get(async (req, res) => {
-  try {
+router.route('/:id').get(
+  asyncErrorHandler(async (req, res) => {
     const { boardId, id: taskId } = req.params;
     const task = await tasksService.getById(taskId, boardId);
 
     res.json(User.toResponse(task));
-  } catch ({ message }) {
-    res.status(404).send(message);
-  }
-});
+  })
+);
 
 router.route('/').post(async (req, res) => {
   const { boardId } = req.params;
