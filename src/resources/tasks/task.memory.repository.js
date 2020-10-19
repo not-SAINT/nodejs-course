@@ -1,3 +1,6 @@
+const { NOT_FOUND } = require('http-status-codes');
+
+const CustomError = require('../../common/errors');
 const DB = require('../../common/localDB');
 const Task = require('./task.model');
 
@@ -7,10 +10,13 @@ const getAll = async id => {
 
 const getById = async (taskId, boardId) => {
   const tasks = await getAll(boardId);
-  const task = tasks.filter(({ id }) => id === taskId)[0];
+  const task = tasks.find(({ id }) => id === taskId);
 
   if (!task) {
-    throw new Error(`The task with id = ${taskId} wasn't found.`);
+    throw new CustomError(
+      NOT_FOUND,
+      `The task with id = ${taskId} wasn't found.`
+    );
   }
 
   return task;

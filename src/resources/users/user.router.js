@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { asyncErrorHandler } = require('../../common/errorHandlers');
 const User = require('./user.model');
 const usersService = require('./user.service');
 
@@ -9,12 +10,14 @@ router.route('/').get(async (req, res) => {
   res.json(users.map(User.toResponse));
 });
 
-router.route('/:id').get(async (req, res) => {
-  const { id } = req.params;
-  const user = await usersService.getById(id);
+router.route('/:id').get(
+  asyncErrorHandler(async (req, res) => {
+    const { id } = req.params;
+    const user = await usersService.getById(id);
 
-  res.json(User.toResponse(user));
-});
+    res.json(User.toResponse(user));
+  })
+);
 
 router.route('/').post(async (req, res) => {
   const user = await usersService.create(req.body);

@@ -1,16 +1,20 @@
+const { NOT_FOUND } = require('http-status-codes');
+
 const DB = require('../../common/localDB');
 const User = require('./user.model');
 const tasksRepo = require('../tasks/task.memory.repository');
+const CustomError = require('../../common/errors');
 
-const getAll = async () => {
-  return DB.users;
-};
+const getAll = async () => DB.users;
 
 const getById = async userId => {
-  const user = DB.users.filter(({ id }) => id === userId)[0];
+  const user = DB.users.find(({ id }) => id === userId);
 
   if (!user) {
-    throw new Error(`The user with id = ${userId} wasn't found.`);
+    throw new CustomError(
+      NOT_FOUND,
+      `The user with id = ${userId} wasn't found.`
+    );
   }
 
   return user;

@@ -3,6 +3,7 @@ const router = require('express').Router();
 const Board = require('./board.model');
 const boardService = require('./board.service');
 const taskRouter = require('../tasks/task.router');
+const { asyncErrorHandler } = require('../../common/errorHandlers');
 
 router.route('/').get(async (req, res) => {
   const boards = await boardService.getAll();
@@ -10,16 +11,14 @@ router.route('/').get(async (req, res) => {
   res.json(boards.map(Board.toResponse));
 });
 
-router.route('/:id').get(async (req, res) => {
-  try {
+router.route('/:id').get(
+  asyncErrorHandler(async (req, res) => {
     const { id } = req.params;
     const board = await boardService.getById(id);
 
     res.json(Board.toResponse(board));
-  } catch ({ message }) {
-    res.status(404).send(message);
-  }
-});
+  })
+);
 
 router.route('/').post(async (req, res) => {
   const board = await boardService.create(req.body);

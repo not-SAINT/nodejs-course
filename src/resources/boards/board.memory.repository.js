@@ -1,17 +1,23 @@
+const { NOT_FOUND } = require('http-status-codes');
+
 const DB = require('../../common/localDB');
 const Board = require('./board.model');
 const Column = require('../column/column.model');
 const tasksRepo = require('../tasks/task.memory.repository');
+const CustomError = require('../../common/errors');
 
 const getAll = async () => {
   return DB.boards;
 };
 
 const getById = async boardId => {
-  const board = DB.boards.filter(({ id }) => id === boardId)[0];
+  const board = DB.boards.find(({ id }) => id === boardId);
 
   if (!board) {
-    throw new Error(`The board with id = ${boardId} wasn't found.`);
+    throw new CustomError(
+      NOT_FOUND,
+      `The board with id = ${boardId} wasn't found.`
+    );
   }
 
   return board;
