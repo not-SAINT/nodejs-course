@@ -4,12 +4,14 @@ const { asyncErrorHandler } = require('../../common/errorHandlers');
 const User = require('./task.model');
 const tasksService = require('./task.service');
 
-router.route('/').get(async (req, res) => {
-  const { boardId } = req.params;
-  const tasks = await tasksService.getAll(boardId);
+router.route('/').get(
+  asyncErrorHandler(async (req, res) => {
+    const { boardId } = req.params;
+    const tasks = await tasksService.getAll(boardId);
 
-  res.json(tasks.map(User.toResponse));
-});
+    res.json(tasks.map(User.toResponse));
+  })
+);
 
 router.route('/:id').get(
   asyncErrorHandler(async (req, res) => {
@@ -20,26 +22,32 @@ router.route('/:id').get(
   })
 );
 
-router.route('/').post(async (req, res) => {
-  const { boardId } = req.params;
-  const task = await tasksService.create({ ...req.body, boardId });
+router.route('/').post(
+  asyncErrorHandler(async (req, res) => {
+    const { boardId } = req.params;
+    const task = await tasksService.create({ ...req.body, boardId });
 
-  res.json(User.toResponse(task));
-});
+    res.json(User.toResponse(task));
+  })
+);
 
-router.route('/:id').delete(async (req, res) => {
-  const { id: taskId } = req.params;
+router.route('/:id').delete(
+  asyncErrorHandler(async (req, res) => {
+    const { id: taskId } = req.params;
 
-  await tasksService.deleteById(taskId);
+    await tasksService.deleteById(taskId);
 
-  res.json(`task is deleted with id = ${taskId}`);
-});
+    res.json(`task is deleted with id = ${taskId}`);
+  })
+);
 
-router.route('/:id').put(async (req, res) => {
-  const { id: taskId } = req.params;
-  const task = await tasksService.updateById(taskId, { ...req.body });
+router.route('/:id').put(
+  asyncErrorHandler(async (req, res) => {
+    const { id: taskId } = req.params;
+    const task = await tasksService.updateById(taskId, { ...req.body });
 
-  res.json(User.toResponse(task));
-});
+    res.json(User.toResponse(task));
+  })
+);
 
 module.exports = router;
