@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
+const { asyncErrorHandler } = require('../../common/errorHandlers');
 const Board = require('./board.model');
 const boardService = require('./board.service');
 const taskRouter = require('../tasks/task.router');
-const { asyncErrorHandler } = require('../../common/errorHandlers');
 
 router.route('/').get(
   asyncErrorHandler(async (req, res) => {

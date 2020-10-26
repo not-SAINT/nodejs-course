@@ -1,7 +1,7 @@
 const router = require('express').Router({ mergeParams: true });
 
 const { asyncErrorHandler } = require('../../common/errorHandlers');
-const User = require('./task.model');
+const Task = require('./task.model');
 const tasksService = require('./task.service');
 
 router.route('/').get(
@@ -9,7 +9,7 @@ router.route('/').get(
     const { boardId } = req.params;
     const tasks = await tasksService.getAll(boardId);
 
-    res.json(tasks.map(User.toResponse));
+    res.json(tasks.map(Task.toResponse));
   })
 );
 
@@ -18,7 +18,7 @@ router.route('/:id').get(
     const { boardId, id: taskId } = req.params;
     const task = await tasksService.getById(taskId, boardId);
 
-    res.json(User.toResponse(task));
+    res.json(Task.toResponse(task));
   })
 );
 
@@ -27,7 +27,7 @@ router.route('/').post(
     const { boardId } = req.params;
     const task = await tasksService.create({ ...req.body, boardId });
 
-    res.json(User.toResponse(task));
+    res.json(Task.toResponse(task));
   })
 );
 
@@ -46,7 +46,7 @@ router.route('/:id').put(
     const { id: taskId } = req.params;
     const task = await tasksService.updateById(taskId, { ...req.body });
 
-    res.json(User.toResponse(task));
+    res.json(Task.toResponse(task));
   })
 );
 

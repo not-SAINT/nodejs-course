@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { OK } = require('http-status-codes');
 
 const { asyncErrorHandler } = require('../../common/errorHandlers');
 const User = require('./user.model');
@@ -35,7 +36,7 @@ router.route('/:id').delete(
 
     await usersService.deleteById(id);
 
-    res.json(`user is deleted with id = ${id}`);
+    res.status(OK).send(`user is deleted with id = ${id}`);
   })
 );
 
@@ -45,7 +46,7 @@ router.route('/:id').put(
     const { name, login, password } = req.body;
     const user = await usersService.updateById(id, { name, login, password });
 
-    res.json(User.toResponse(user));
+    res.status(OK).send(User.toResponse(user));
   })
 );
 
