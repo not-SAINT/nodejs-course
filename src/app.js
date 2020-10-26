@@ -40,9 +40,4 @@ app.use(errorHandler);
 process.on('uncaughtException', uncaughtExceptionHandler);
 process.on('unhandledRejection', unhandledRejectionHandler);
 
-// for cross-check
-// throw Error('Oops!');
-// eslint-disable-next-line no-unreachable
-// Promise.reject(Error('Oops!'));
-
 module.exports = app;

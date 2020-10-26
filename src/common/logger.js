@@ -9,10 +9,14 @@ const consoleFormat = printf(({ level, message, timestamp: time }) => {
 const messageFormat = (req, res) => {
   const { method, url, query, body } = req;
   const { statusCode, responseTime } = res;
+  const safeBody = JSON.stringify(body).replace(
+    /,("password":").+"/,
+    ',$1****'
+  );
 
   return `${method} ${url} query = ${JSON.stringify(
     query
-  )} body = ${JSON.stringify(body)} - ${statusCode} ${responseTime}ms`;
+  )} body = ${safeBody} - ${statusCode} ${responseTime}ms`;
 };
 
 const options = {

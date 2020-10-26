@@ -1,4 +1,4 @@
-const usersRepo = require('./user.memory.repository');
+const usersRepo = require('./user.mongoDB.repository');
 
 const getAll = () => usersRepo.getAll();
 
