@@ -4,12 +4,22 @@ const getAll = () => usersRepo.getAll();
 
 const getById = id => usersRepo.getById(id);
 
-const create = userData => {
-  return usersRepo.create(userData);
-};
+const getByLogin = login => usersRepo.getByLogin(login);
+
+const create = userData => usersRepo.create(userData);
+
+const createAdmin = adminName => usersRepo.createAdmin(adminName);
 
 const deleteById = id => usersRepo.deleteById(id);
 
 const updateById = (id, userData) => usersRepo.updateById(id, userData);
 
-module.exports = { getAll, getById, create, deleteById, updateById };
+module.exports = {
+  getAll,
+  getById,
+  getByLogin,
+  create,
+  deleteById,
+  updateById,
+  createAdmin
+};

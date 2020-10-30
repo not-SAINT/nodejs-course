@@ -11,14 +11,18 @@ const { middlewareLogger } = require('./common/logger');
 const {
   uncaughtExceptionHandler,
   unhandledRejectionHandler,
-  errorHandler
+  errorHandler,
+  asyncErrorHandler
 } = require('./common/errorHandlers');
+const { tokenCheck, tryLogin } = require('./common/authentication');
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
+
 app.use(middlewareLogger);
+
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/', (req, res, next) => {
@@ -28,6 +32,10 @@ app.use('/', (req, res, next) => {
   }
   next();
 });
+
+app.post('/login', asyncErrorHandler(tryLogin));
+app.use(asyncErrorHandler(tokenCheck));
+
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 
